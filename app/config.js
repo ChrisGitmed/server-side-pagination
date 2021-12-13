@@ -1,5 +1,3 @@
 require('dotenv').config();
 
-const config = require('config');
-
-module.exports = config;
+module.exports = config = require('config');

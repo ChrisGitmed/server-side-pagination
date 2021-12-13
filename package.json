@@ -1,13 +1,15 @@
 {
   "dependencies": {
     "config": "^3.3.6",
+    "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "helmet": "^4.6.0",
     "knex": "^0.95.14",
     "morgan": "^1.10.0",
     "pg": "^8.7.1",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "yargs": "^17.3.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
@@ -21,7 +23,7 @@
     "resetdb": "yarn knex-rb && yarn knex-m",
     "knex-rb": "knex migrate:rollback --all --env localdev",
     "knex-m": "knex migrate:latest --env localdev",
-    "dockerdb": "docker run -d --name ssp-api --restart unless-stopped -e POSTGRES_USER=sspuser -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=ssp -p 33800:5431 postgres:14"
+    "dockerdb": "docker run -d --name ssp-api --restart unless-stopped -e POSTGRES_USER=sspuser -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=ssp -p 33900:5432 postgres:13"
   },
   "repository": {
     "type": "git",
