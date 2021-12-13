@@ -13,19 +13,24 @@ router.get('/v1/users', async (req, res, next) => {
 });
 
 
-
+// Send back { data: [], current_page, last_page }
 /// Paginate (via limit and offset) 🎉
 router.get('/v1/pagination/users', async (req, res, next) => {
-  let { page, size } = req.query;
+  let { page, limit } = req.query;
 
   if (!page) page = 1
-  if (!size) size = 50;
+  if (!limit) limit = 50;
 
-  const limit = parseInt(size);
-  const skip = (page - 1) * size;
+  limit = parseInt(limit);
+  const skip = (page - 1) * limit;
 
-  const [err, users] = await asCallBack(Users.getAllPaginated(skip, limit))
+  const [err, results] = await asCallBack(Users.getAllPaginated(skip, limit))
   if (err) return errHandler(err, next, `Users.getAllPaginate: ${skip}, ${limit}`);
 
-  res.status(200).json(users);
+  const [errLast, last_page_results] = await asCallBack(Users.getLastPageNumber(limit));
+  if (errLast) return errHandler(errLast, next, `Users.getLastPageNumber: ${limit}`);
+  console.log('last_page_results: ',last_page_results)
+
+
+  res.status(200).json({ data: results, current_page: parseInt(page), last_page: last_page_results });
 });

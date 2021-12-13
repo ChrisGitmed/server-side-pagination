@@ -18,7 +18,16 @@ class Users {
       .limit(limit)
       .offset(skip);
     return results;
-  }
+  };
+
+
+
+  static async getLastPageNumber(limit, whereClause) {
+    const [{ count }] = await db('users')
+      .count('id')
+      .where({ active: true });
+    return Math.ceil(count / limit);
+  };
 };
 
 
