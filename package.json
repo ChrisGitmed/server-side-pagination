@@ -20,11 +20,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon app/app.js",
-    "resetdb": "yarn knex-rb && yarn knex-m",
+    "resetdb": "yarn knex-rb && yarn knex-m && node app/scripts/seedUsers.js --run",
     "knex-rb": "knex migrate:rollback --all --env localdev",
     "knex-m": "knex migrate:latest --env localdev",
-    "dockerdb": "docker run -d --name ssp-api --restart unless-stopped -e POSTGRES_USER=sspuser -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=ssp -p 33900:5432 postgres:13",
-    "seed": "node app/scripts/seedUsers.js --run"
+    "seed": "node app/scripts/seedUsers.js --run",
+    "dockerdb": "docker run -d --name ssp-api --restart unless-stopped -e POSTGRES_USER=sspuser -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=ssp -p 33900:5432 postgres:13"
   },
   "repository": {
     "type": "git",
