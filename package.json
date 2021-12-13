@@ -23,7 +23,8 @@
     "resetdb": "yarn knex-rb && yarn knex-m",
     "knex-rb": "knex migrate:rollback --all --env localdev",
     "knex-m": "knex migrate:latest --env localdev",
-    "dockerdb": "docker run -d --name ssp-api --restart unless-stopped -e POSTGRES_USER=sspuser -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=ssp -p 33900:5432 postgres:13"
+    "dockerdb": "docker run -d --name ssp-api --restart unless-stopped -e POSTGRES_USER=sspuser -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=ssp -p 33900:5432 postgres:13",
+    "seed": "node app/scripts/seedUsers.js --run"
   },
   "repository": {
     "type": "git",
