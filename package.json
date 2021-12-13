@@ -1,0 +1,37 @@
+{
+  "dependencies": {
+    "config": "^3.3.6",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "helmet": "^4.6.0",
+    "knex": "^0.95.14",
+    "morgan": "^1.10.0",
+    "pg": "^8.7.1",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "name": "server-side-pagination",
+  "description": "Quick repo to learn server-side pagination with Node.js and PostgreSQL",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon app/app.js",
+    "resetdb": "yarn knex-rb && yarn knex-m",
+    "knex-rb": "knex migrate:rollback --all --env localdev",
+    "knex-m": "knex migrate:latest --env localdev",
+    "dockerdb": "docker run -d --name ssp-api --restart unless-stopped -e POSTGRES_USER=sspuser -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=ssp -p 33800:5431 postgres:14"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChrisGitmed/server-side-pagination.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ChrisGitmed/server-side-pagination/issues"
+  },
+  "homepage": "https://github.com/ChrisGitmed/server-side-pagination#readme"
+}
