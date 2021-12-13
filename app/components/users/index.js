@@ -11,10 +11,10 @@ class Users {
 
 
   /// Paginate
-  static async getAllPaginated(skip, limit) {
+  static async getAllPaginated(skip, limit, sort_column, sort_order) {
     const results = await db('users')
       .select('*')
-      .orderBy('id', 'asc')
+      .orderBy(sort_column, sort_order)
       .limit(limit)
       .offset(skip);
     return results;
