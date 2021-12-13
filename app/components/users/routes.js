@@ -32,5 +32,5 @@ router.get('/v1/pagination/users', async (req, res, next) => {
   console.log('last_page_results: ',last_page_results)
 
 
-  res.status(200).json({ data: results, current_page: parseInt(page), last_page: last_page_results });
+  res.status(200).json({ data: results, current_page: parseInt(page), last_page: last_page_results, limit });
 });
