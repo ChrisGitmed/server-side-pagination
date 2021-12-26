@@ -12,21 +12,24 @@ router.get('/v1/users', async (req, res, next) => {
     res.status(201).json(users);
 });
 
+
+
 /// Paginate (via limit and offset) 🎉
-router.get('/v1/pagination/users', async (req, res, next) => {
+router.post('/v1/pagination/users', async (req, res, next) => {
   let { page, limit, sort_column, sort_order } = req.query;
-
+  
   if (!page) page = 1;
+  page = parseInt(page);
 
-  if (!limit) limit = 50;
+  if (!limit) limit = 10;
   limit = parseInt(limit);
-
+  
   if (!sort_column) sort_column = 'id';
-
+  
   if (!sort_order || (sort_order.toUpperCase() !== 'ASC' && sort_order.toUpperCase() !== 'DESC')) sort_order = 'ASC';
-
+  
   const skip = (page - 1) * limit;
-
+  
   // Get Users
   const [errUsers, users] = await asCallBack(Users.getAllPaginated(skip, limit, sort_column, sort_order))
   if (errUsers) return errHandler(errUsers, next, `Users.getAllPaginated: ${skip}, ${limit}, ${sort_column}, ${sort_order}`);

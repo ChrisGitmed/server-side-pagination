@@ -1,74 +1,64 @@
-const express = require('express')
-const helmet = require('helmet')
-const cors = require('cors')
-const morgan = require('morgan')
+const cors = require('cors');
+const express = require('express');
+const helmet = require('helmet');
+const morgan = require('morgan');
 
+const config = require('./config');
 const { Err } = require('./lib/error');
 const db = require('./db')
 const routes = require('./router')
-const config = require('./config')
 
-const app = express()
+const app = express();
 
 class Application {
   constructor() {
-    app.use(express.json())
-    app.use(express.urlencoded({ extended: true }))
-    app.use(helmet())
-    app.use(cors({ exposedHeaders: ['Content-Disposition'] }))
-    app.use(morgan('dev'))
-    app.use('/api', routes)
+    this.app = app.use(express.json())
+      .use(express.urlencoded({ extended: true }))
+      .use(helmet())
+      .use(cors({ exposedHeaders: ['Content-Disposition'] }))
+      .use(morgan('dev'))
+      .use('/api', routes)
 
-    // Top level error handling
-    app.use(async (err, req, res, next) => {
-      if (err instanceof Err) {
-        if (res.headersSent) { return next(err) }
-        console.log('::::ERR::::')
-        console.log('::::UUID: ', err.uuid)
-        console.log('::::CODE: ', err.code)
-        console.log('::::MSG: ', err.message)
-        return res.status(err.code).json({ message: err.message })
-      }
+      // Top level error handling
+      .use(async (err, req, res, next) => {
+        if (res.headersSent) { return next(err) };
 
-      // Unknown error
-      if (res.headersSent) { return next(err) }
-      console.log('::::ERR - UNKNOWN::::')
-      console.log('::::CODE: ', err.code)
-      console.log('::::MSG: ', err.message)
-      return res.status(500).json({ message: `Uknown error occured: ${err.message}` })
-    })
+        if (err instanceof Err) {
+          console.log('::::ERR::::');
+          console.log('::::UUID: ', err.uuid);
+          console.log('::::CODE: ', err.code);
+          console.log('::::MSG: ', err.message);
+          return res.status(err.code).json({ message: err.message });
+        };
 
-    this.app = app
-  }
+        // Unknown error
+        console.log('::::ERR - UNKNOWN::::');
+        console.log('::::CODE: ', err.code);
+        console.log('::::MSG: ', err.message);
+        return res.status(500).json({ message: `Uknown error occured: ${err.message}` });
+      });
+  };
 
   async start (port) {
-    process.on('uncaughtException', (e) => {
-      console.error('Top-Level exception', e, e.stack)
-    })
+    process.on('uncaughtException', (e) => console.error('Top-Level exception', e, e.stack));
 
     await db.connected();
 
     return new Promise((resolve, reject) => {
-      app.listen(port, async (err) => {
+      app.listen(port, async err => {
         if (err) {
-          console.log(err)
-          reject(err)
-        }
-        console.info(`Server now listening on port: ${port}`)
-        resolve()
-      })
-    })
-  }
-}
-
-const APP = new Application();
+          console.log(err);
+          reject(err);
+        };
+        console.info(`Server now listening on port: ${port}`);
+        resolve();
+      });
+    });
+  };
+};
 
 (async function main () {
-    // called directly (i.e. from command line/terminal)
-    if (require.main === module) {
-      let port = config.port
-      await APP.start(port || 8080)
-    }
-  })()
+  // called directly (i.e. from command line)
+  if (require.main === module) await new Application().start(config.port || 8080);
+})();
 
-  module.exports = APP.app

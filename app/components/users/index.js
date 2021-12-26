@@ -22,7 +22,8 @@ class Users {
 
 
 
-  static async getLastPageNumber(limit, whereClause) {
+  /// Get Last Page Number
+  static async getLastPageNumber(limit) {
     const [{ count }] = await db('users')
       .count('id')
       .where({ active: true });
